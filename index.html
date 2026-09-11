@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A user management dashboard demo with a searchable directory and browser-local editing.">
+  <meta name="theme-color" content="#12364a">
+  <title>User Management – Edit Users</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to users</a>
+  <header class="topbar d-flex align-items-center justify-content-between px-3 px-lg-4">
+    <div class="d-flex align-items-center gap-3"><button id="nav-toggle" class="btn menu-button" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true"><i class="bi bi-list" aria-hidden="true"></i></button><a class="brand" href="./"><span class="brand-mark">u</span> user<span class="fw-normal">space</span><span class="workspace-tag d-none d-sm-inline">WORKSPACE</span></a></div>
+    <button class="profile-button" id="profile"><span class="avatar small-avatar">AD</span><span class="d-none d-sm-inline">Demo administrator</span><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+  </header>
+  <aside id="sidebar" class="sidebar offcanvas-lg offcanvas-start" tabindex="-1" aria-labelledby="nav-title">
+    <div class="offcanvas-header"><h2 id="nav-title" class="h6 mb-0">Workspace navigation</h2><button class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close navigation"></button></div>
+    <div class="offcanvas-body d-flex flex-column p-3">
+      <p class="nav-eyebrow">WORKSPACE</p><nav aria-label="Main navigation"><a class="nav-item-link active" href="#main" aria-current="page"><i class="bi bi-people" aria-hidden="true"></i> User management <span class="nav-count" id="nav-count">15</span></a><button class="nav-item-link" id="data-tools"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Import & export</button></nav>
+      <div class="sidebar-note mt-auto"><span class="demo-dot"></span> Assessment workspace<p>Explore with demo users.<br>Your changes stay in this browser.</p><button id="reset-demo" class="reset-button">Reset demo data ↗</button></div>
+      <div class="sidebar-footer">USERSPACE <span>v1.0</span></div>
+    </div>
+  </aside>
+  <main id="main" class="main-content" tabindex="-1">
+    <div class="breadcrumb-text">Workspace <span>/</span> User management</div>
+    <section class="page-heading d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><p class="eyebrow">PEOPLE & ACCESS</p><h1>User management</h1><p class="text-secondary mb-0">A clear view of your people. Everything you need to manage access.</p></div><button id="add-user" class="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add user</button></section>
+    <section class="row g-3 mb-4" aria-label="Directory summary">
+      <div class="col-12 col-sm-4"><div class="stat-card"><div><span class="stat-label">Total users</span><strong id="total-count">0</strong><small>Your workspace directory</small></div><span class="stat-symbol" aria-hidden="true"><i class="bi bi-people"></i></span></div></div>
+      <div class="col-6 col-sm-4"><div class="stat-card"><div><span class="stat-label">Active users</span><strong id="active-count">0</strong><small>Currently enabled</small></div><span class="stat-symbol teal" aria-hidden="true"><i class="bi bi-check2-circle"></i></span></div></div>
+      <div class="col-6 col-sm-4"><div class="stat-card"><div><span class="stat-label">Inactive users</span><strong id="inactive-count">0</strong><small>Access disabled</small></div><span class="stat-symbol" aria-hidden="true"><i class="bi bi-pause-circle"></i></span></div></div>
+    </section>
+    <div id="storage-warning" class="alert alert-warning" role="alert" hidden></div>
+    <section class="directory-card" aria-labelledby="directory-title">
+      <div class="directory-heading d-flex flex-wrap align-items-center justify-content-between gap-3"><div class="d-flex align-items-center gap-2"><div><p class="section-kicker mb-1">DIRECTORY</p><h2 id="directory-title">Edit users</h2></div><span class="count-pill" id="directory-count">15 users</span></div><div class="d-flex gap-2 directory-actions"><button class="btn btn-outline-secondary" id="import-button"><i class="bi bi-upload" aria-hidden="true"></i> Import JSON</button><div class="dropdown"><button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-download" aria-hidden="true"></i> Export</button><ul class="dropdown-menu dropdown-menu-end"><li><button class="dropdown-item" id="export-json">Export JSON</button></li><li><button class="dropdown-item" id="export-csv">Export CSV</button></li></ul></div></div></div>
+      <form id="filters" class="filter-panel" role="search"><div class="search-field"><label for="search">Search users</label><input class="form-control" id="search" type="search" placeholder="Search name, email, or username…"></div><div><label for="filter-group">User Group</label><select class="form-select" id="filter-group"><option value="">All groups</option></select></div><div><label for="filter-status">Status</label><select class="form-select" id="filter-status"><option value="">All statuses</option><option>Active</option><option>Inactive</option></select></div><div><label for="filter-division">Division</label><select class="form-select" id="filter-division"><option value="">All divisions</option></select></div><button class="btn clear-button" type="reset">Clear filters</button></form>
+      <div class="table-responsive" role="region" aria-label="Users table, scroll horizontally for more columns" tabindex="0"><table class="table align-middle mb-0"><caption class="visually-hidden">User directory with editable account details</caption><thead><tr><th scope="col" aria-sort="ascending"><button data-sort="firstName">User <span aria-hidden="true">↑</span></button></th><th scope="col"><button data-sort="userGroup">User Group ↕</button></th><th scope="col"><button data-sort="division">Division / Region ↕</button></th><th scope="col"><button data-sort="userType">User Type ↕</button></th><th scope="col"><button data-sort="status">Status ↕</button></th><th scope="col"><button data-sort="submittedDate">Submitted ↕</button></th><th scope="col"><button data-sort="enabledDate">Enabled ↕</button></th><th scope="col" class="text-end">Actions</th></tr></thead><tbody id="users-body"></tbody></table></div>
+      <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No users found</h3><p>No users match the selected filters. Clear filters or add a user to get started.</p><button class="btn btn-outline-secondary" id="empty-clear">Clear filters</button></div>
+      <footer class="table-footer d-flex flex-wrap align-items-center justify-content-between gap-3"><p id="record-count" class="mb-0" role="status"></p><div class="d-flex align-items-center gap-3 flex-wrap"><div class="d-flex align-items-center gap-2"><label for="page-size">Rows</label><select class="form-select" id="page-size"><option>5</option><option selected>10</option><option>25</option></select></div><nav aria-label="Directory pagination" class="d-flex align-items-center gap-2"><button id="previous" class="btn btn-outline-secondary pagination-button" aria-label="Previous page"><i class="bi bi-chevron-left" aria-hidden="true"></i></button><span id="page-label"></span><button id="next" class="btn btn-outline-secondary pagination-button" aria-label="Next page"><i class="bi bi-chevron-right" aria-hidden="true"></i></button></nav></div></footer>
+    </section>
+    <footer class="page-footer"><span><span class="demo-dot"></span> Demo workspace · Stored in your browser</span><span>Front-End Developer Assessment</span></footer>
+  </main>
+  <div class="modal fade" id="user-modal" tabindex="-1" aria-labelledby="user-modal-title" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5" id="user-modal-title">Add user</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Close user form"></button></div><form id="user-form" novalidate><div class="modal-body"><p class="text-secondary">Keep account and workspace details up to date. All fields are required.</p><div id="form-fields" class="row g-3"></div><p id="form-error" class="text-danger mt-3 mb-0" role="alert"></p></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-primary">Save user</button></div></form></div></div></div>
+  <div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirm-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5" id="confirm-title">Confirm action</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Close confirmation"></button></div><div class="modal-body" id="confirm-message"></div><div class="modal-footer"><button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-primary" id="confirm-action">Confirm</button></div></div></div></div>
+  <div class="modal fade" id="info-modal" tabindex="-1" aria-labelledby="info-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 id="info-title" class="modal-title fs-5">Demo administrator</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Close profile"></button></div><div class="modal-body"><p>This assessment uses fictional users and browser-local data. There is no sign-in or server connection.</p><p class="mb-0">Use the directory to manage demo records, or export a copy to keep your changes.</p></div></div></div></div>
+  <input type="file" id="import-file" accept=".json,application/json" hidden>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="notification" class="toast" role="status" aria-live="polite" aria-atomic="true"><div class="d-flex"><div class="toast-body" id="notification-text"></div><button class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Dismiss notification"></button></div></div></div>
+  <noscript><p class="alert alert-warning">Enable JavaScript to use the user directory.</p></noscript>
+</body>
+</html>
